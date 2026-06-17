@@ -12,6 +12,8 @@ import { getResume, saveApplication, getApplications } from '@/lib/storage';
 
 export default function FilterPage() {
   const [resume, setResume] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchLocation, setSearchLocation] = useState('');
   const [jobs, setJobs] = useState([]);
   const [scored, setScored] = useState([]);
   const [status, setStatus] = useState('idle');
@@ -31,17 +33,27 @@ export default function FilterPage() {
 
   async function loadAndFilter() {
     if (!resume.trim()) { setShowUploader(true); return; }
+    if (!searchQuery.trim()) {
+      setStatus('error');
+      setStatusMsg('Please enter a job title to search for');
+      return;
+    }
     setStatus('thinking');
-    setStatusMsg('Fetching jobs to analyse...');
+    setStatusMsg(`Searching for "${searchQuery}"${searchLocation ? ` in ${searchLocation}` : ''}...`);
     setScored([]);
 
-    // Fetch jobs first via search API
+    // Fetch jobs using the user's own search query + location
     let fetchedJobs = [];
     try {
       const res = await fetch('/api/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: 'software engineer developer designer', sources: ['jobs'] }),
+        body: JSON.stringify({
+          query: searchQuery,
+          location: searchLocation,
+          sources: ['jobs'],
+          perPage: 15,
+        }),
       });
       const data = await res.json();
       fetchedJobs = data.jobs || [];
@@ -50,7 +62,7 @@ export default function FilterPage() {
       setStatus('error'); setStatusMsg('Could not load jobs'); return;
     }
 
-    if (!fetchedJobs.length) { setStatus('error'); setStatusMsg('No jobs to filter'); return; }
+    if (!fetchedJobs.length) { setStatus('error'); setStatusMsg('No jobs found for that search'); return; }
 
     setStatusMsg(`Scoring ${fetchedJobs.length} jobs against your resume with AI...`);
 
@@ -137,29 +149,51 @@ export default function FilterPage() {
           ) : (
             <div>
               <div style={{
-                background: 'rgba(0,212,170,0.08)', border: '1px solid rgba(0,212,170,0.2)',
+                background: 'var(--bg-muted)', border: '1px solid var(--border)',
                 borderRadius: 'var(--radius-sm)', padding: '12px 14px',
                 fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.7,
-                maxHeight: 140, overflow: 'hidden', position: 'relative',
+                maxHeight: 120, overflow: 'hidden', position: 'relative',
               }}>
-                {resume.slice(0, 400)}...
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 40, background: 'linear-gradient(transparent, rgba(13,17,23,0.9))' }} />
+                {resume.slice(0, 350)}...
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 36, background: 'linear-gradient(transparent, var(--bg-muted))' }} />
               </div>
-              <div style={{ marginTop: 10, fontSize: 12, color: 'var(--accent-secondary)' }}>
+              <div style={{ marginTop: 10, fontSize: 12, color: 'var(--accent-green)' }}>
                 ✓ {resume.split(' ').length} words · Resume loaded
               </div>
             </div>
           )}
         </div>
 
-        {/* Run Agent */}
+        {/* Search + Run Agent */}
         <div className="card">
           <div style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 700, marginBottom: 12 }}>
-            ⚡ Run Filter Agent
+            ⚡ Search &amp; Score Jobs
           </div>
-          <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 20 }}>
-            The Filter Agent will fetch the latest jobs and use Gemini AI to score each one against your resume, identifying skill matches, gaps, and ranking them by fit.
+          <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 16 }}>
+            Enter the type of job and optionally a city or country. The Filter Agent will find matching jobs and use Gemini AI to score each one against your resume.
           </p>
+
+          {/* Search inputs for Filter */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
+            <div className="form-group">
+              <label className="form-label">Job Title / Keywords *</label>
+              <input
+                className="input"
+                placeholder="e.g. Software Engineer, Data Analyst, Product Manager"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">City / Country (optional)</label>
+              <input
+                className="input"
+                placeholder="e.g. Mumbai, Delhi, Bangalore, London"
+                value={searchLocation}
+                onChange={(e) => setSearchLocation(e.target.value)}
+              />
+            </div>
+          </div>
           <button
             className="btn btn-primary btn-lg"
             style={{ width: '100%', justifyContent: 'center' }}

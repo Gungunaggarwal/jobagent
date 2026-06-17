@@ -23,7 +23,12 @@ export async function POST(request) {
   }
 
   if (type === 'questions') {
-    const prompt = `You are an expert interview coach. Generate 10 highly relevant interview questions for this specific role, along with strong model answers based on the candidate's background.
+    const prompt = `You are an expert interview coach. 
+
+Generate 10 highly relevant interview questions for this role. 
+IMPORTANT:
+1. The QUESTIONS must be based strictly on the Job Title, Company, and Description. Do NOT ask highly specific questions about the candidate's past projects in the question itself (the interviewer hasn't met them yet).
+2. The MODEL ANSWERS should use specific examples, projects, and skills from the CANDIDATE RESUME to show the candidate exactly how they can use their own background to answer the question effectively.
 
 JOB:
 Title: ${job.title}
@@ -44,7 +49,9 @@ Return ONLY valid JSON array.`;
 
     const raw = await generateContent(prompt, true);
     try {
-      const content = JSON.parse(raw || '[]');
+      if (!raw) throw new Error('Empty response');
+      const content = JSON.parse(raw);
+      if (!Array.isArray(content) || content.length === 0) throw new Error('Invalid or empty array');
       return NextResponse.json({ content, usingTemplate: false });
     } catch {
       return NextResponse.json({ content: getTemplateQuestions(job), usingTemplate: true });
@@ -66,7 +73,9 @@ Return ONLY valid JSON.`;
 
     const raw = await generateContent(prompt, true);
     try {
-      const content = JSON.parse(raw || '{}');
+      if (!raw) throw new Error('Empty response');
+      const content = JSON.parse(raw);
+      if (!content || Object.keys(content).length === 0) throw new Error('Invalid or empty object');
       return NextResponse.json({ content, usingTemplate: false });
     } catch {
       return NextResponse.json({ content: getTemplateCheatsheet(job), usingTemplate: true });
@@ -85,7 +94,9 @@ Return ONLY valid JSON.`;
 
     const raw = await generateContent(prompt, true);
     try {
-      const content = JSON.parse(raw || '{}');
+      if (!raw) throw new Error('Empty response');
+      const content = JSON.parse(raw);
+      if (!content || !content['30']) throw new Error('Invalid or empty object');
       return NextResponse.json({ content, usingTemplate: false });
     } catch {
       return NextResponse.json({ content: getTemplatePlan(job), usingTemplate: true });
