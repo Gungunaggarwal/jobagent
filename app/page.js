@@ -47,8 +47,6 @@ export default function DashboardPage() {
   const pipeline = [
     { label: 'Saved',     count: stats.saved,     icon: '🔖', color: 'var(--text-secondary)' },
     { label: 'Applied',   count: stats.applied,   icon: '📨', color: 'var(--accent-primary)' },
-    { label: 'Interview', count: stats.interview, icon: '🗓️', color: 'var(--accent-amber)' },
-    { label: 'Offer',     count: stats.offer,     icon: '🎉', color: 'var(--accent-green)' },
   ];
 
   const steps = [
