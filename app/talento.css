@@ -1,0 +1,451 @@
+/* ──────────────────────────────────────────────────────────
+   TALENTO LANDING PAGE & LOGIN CSS (EXACT IMAGE RECREATION)
+────────────────────────────────────────────────────────── */
+
+/* --- Landing Page --- */
+.landing-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-inter);
+}
+
+/* The exact dark green tropical leaves background */
+.landing-bg-leaves {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #062113; 
+  background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2000&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+/* The centered floating card */
+.landing-card {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  width: 90%;
+  max-width: 1100px;
+  height: 80vh;
+  max-height: 650px;
+  border-radius: 28px;
+  /* We use a pseudo-element for the white background so we can use a complex mask */
+}
+
+/* The white background with the curved "bite" taken out of the right side */
+.landing-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: #f8fafc;
+  border-radius: 28px;
+  /* This creates the smooth concave curve on the right side where the leaves show through */
+  -webkit-mask-image: radial-gradient(ellipse 80% 120% at 90% 50%, transparent 45%, black 65%);
+  mask-image: radial-gradient(ellipse 80% 120% at 90% 50%, transparent 45%, black 65%);
+  z-index: 1;
+}
+
+/* Left Solid Content */
+.landing-content {
+  flex: 1.1;
+  padding: 60px 70px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10; /* Above the white background */
+}
+
+.landing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: auto;
+}
+
+.landing-logo {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  color: #0f172a;
+}
+
+.landing-main-text {
+  margin-bottom: auto;
+  max-width: 450px;
+}
+
+.landing-main-text h1 {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #1e3f2b; /* Dark green branding */
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.landing-description {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #334155;
+  margin-bottom: 24px;
+}
+
+.landing-subtext {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #64748b;
+  margin-bottom: 40px;
+}
+
+.landing-btn {
+  display: inline-block;
+  background: #1e3f2b;
+  color: white;
+  text-decoration: none;
+  padding: 14px 40px;
+  border-radius: 30px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.landing-btn:hover {
+  background: #112a1c;
+  transform: translateY(-2px);
+}
+
+/* --- The Right Side Slices Effect --- */
+.landing-slices {
+  flex: 1.3;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+/* Top Nav over slices */
+.landing-nav {
+  position: absolute;
+  top: 60px;
+  right: 60px;
+  display: flex;
+  gap: 32px;
+  z-index: 30; 
+}
+
+.landing-nav a {
+  text-decoration: none;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.landing-nav a:hover {
+  color: #000;
+}
+
+/* Slices structure */
+.slices-wrapper {
+  position: absolute;
+  /* Position the slices right inside the curved cutout */
+  top: 5%; bottom: 5%; left: 0; right: 5%;
+  display: flex;
+}
+
+/* The giant horizontal text cutting across */
+.slices-center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: 6vw; 
+  max-font-size: 72px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 0.05em;
+  z-index: 20;
+  pointer-events: none; 
+}
+
+/* Individual Slices */
+.slice {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  /* Glassmorphism panel blurring the background leaves */
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  transition: flex 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  /* Soft fade at the top and bottom just like the image */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+}
+
+.slice:hover {
+  flex: 1.4;
+  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.slice-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+
+/* --- Login Page --- */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  background: #0f291e; 
+  overflow: hidden;
+  font-family: var(--font-inter);
+}
+
+.login-bg-leaves {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2000&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+/* Wavy paper cut effect (Smooth organic curves) */
+.paper-cut {
+  position: absolute;
+  top: -10%; left: -10%;
+  height: 120%;
+  background: white;
+  z-index: 1;
+  box-shadow: 15px 0 40px rgba(0,0,0,0.3);
+}
+
+.paper-1 {
+  width: 60%;
+  border-radius: 0 40% 50% 0;
+  z-index: 3;
+}
+
+.paper-2 {
+  width: 63%;
+  background: #f1f5f9;
+  border-radius: 0 45% 55% 0;
+  z-index: 2;
+  transform: rotate(-2deg);
+}
+
+.paper-3 {
+  width: 66%;
+  background: #e2e8f0;
+  border-radius: 0 50% 60% 0;
+  z-index: 1;
+  transform: rotate(-4deg);
+}
+
+.login-card {
+  position: relative;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: 40px;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+  border: 1px solid rgba(255,255,255,0.7);
+  margin-right: 15%; 
+}
+
+.login-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: white;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-input:focus {
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.5;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  background: #064e3b; 
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-login:hover {
+  background: #047857;
+  transform: translateY(-1px);
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  margin: 24px 0;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #cbd5e1;
+}
+
+.login-divider span {
+  padding: 0 12px;
+}
+
+.social-logins {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.social-btn {
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.social-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.forgot-password {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  color: #64748b;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  color: #0f172a;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 900px) {
+  .landing-card {
+    flex-direction: column;
+    height: 95vh;
+    max-height: none;
+    overflow-y: auto;
+  }
+  .landing-content {
+    border-radius: 28px 28px 0 0;
+    padding: 40px;
+    flex: none;
+  }
+  .landing-card::before {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .landing-slices {
+    border-radius: 0 0 28px 28px;
+    height: 50vh;
+    flex: none;
+  }
+  .landing-nav {
+    display: none; 
+  }
+  .slices-center-text {
+    font-size: 40px;
+  }
+  
+  /* Login Mobile */
+  .paper-cut {
+    display: none; 
+  }
+  .login-card {
+    margin: 0 20px;
+    max-width: none;
+    background: rgba(255, 255, 255, 0.95);
+  }
+}

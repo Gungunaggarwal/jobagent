@@ -2,14 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 
 const NAV_ITEMS = [
-  { href: '/',        icon: '🏠', label: 'Dashboard',    desc: 'Overview' },
-  { href: '/search',  icon: '🔍', label: 'Search Agent', desc: 'Find jobs' },
-  { href: '/filter',  icon: '🎯', label: 'Filter Agent', desc: 'Match resume' },
-  { href: '/apply',   icon: '📨', label: 'Apply Agent',  desc: 'Track & apply' },
-  { href: '/prep',    icon: '🧠', label: 'Prep Agent',   desc: 'Interview prep' },
-  { href: '/settings',icon: '⚙️', label: 'Settings',     desc: 'API keys' },
+  { href: '/dashboard', icon: '🏠', label: 'Dashboard' },
+  { href: '/search',    icon: '🔍', label: 'Search Agent' },
+  { href: '/filter',    icon: '🎯', label: 'Filter Agent' },
+  { href: '/apply',     icon: '📨', label: 'Apply Agent' },
+  { href: '/prep',      icon: '🧠', label: 'Prep Agent' },
 ];
 
 export default function Sidebar() {
@@ -18,14 +18,16 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <div className="sidebar-logo-icon">🤖</div>
-        <span className="sidebar-logo-text">JobAgent</span>
+        <span style={{ fontSize: 22 }}>🤖</span>
+        Talento
       </div>
 
-      <p className="sidebar-section-label">Agents</p>
+      <div style={{ padding: '0 12px', fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
+        Agents
+      </div>
 
       <nav className="sidebar-nav">
-        {NAV_ITEMS.slice(0, 5).map((item) => (
+        {NAV_ITEMS.map((item) => (
           <Link
             key={item.href}
             href={item.href}
@@ -39,24 +41,25 @@ export default function Sidebar() {
         <div style={{ flex: 1 }} />
 
         <hr className="divider" style={{ margin: '12px 0' }} />
-        <p className="sidebar-section-label">Config</p>
-
-        {NAV_ITEMS.slice(5).map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`sidebar-link ${pathname === item.href ? 'active' : ''}`}
-          >
-            <span className="sidebar-link-icon">{item.icon}</span>
-            <span>{item.label}</span>
-          </Link>
-        ))}
+        
+        <Link href="/settings" className={`sidebar-link ${pathname === '/settings' ? 'active' : ''}`}>
+          <span className="sidebar-icon">⚙️</span>
+          Settings
+        </Link>
+        <button 
+          onClick={() => signOut({ callbackUrl: '/' })} 
+          className="sidebar-link" 
+          style={{ width: '100%', textAlign: 'left', background: 'transparent', border: 'none', cursor: 'pointer', marginTop: 8 }}
+        >
+          <span className="sidebar-icon">🚪</span>
+          Log out
+        </button>
       </nav>
 
-      <div className="sidebar-footer">
-        <div style={{ fontSize: '11px', color: 'var(--text-muted)', padding: '0 12px', lineHeight: 1.5 }}>
-          Powered by Gemini AI<br />+ RapidAPI
-        </div>
+      {/* Footer info */}
+      <div style={{ marginTop: 'auto', padding: '24px 12px 12px', borderTop: '1px solid var(--border)', fontSize: 12, color: 'var(--text-muted)' }}>
+        Powered by Gemini AI<br/>
+        & RapidAPI
       </div>
     </aside>
   );
