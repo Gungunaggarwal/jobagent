@@ -15,12 +15,7 @@ export default function DashboardPage() {
   const [recentJobs, setRecentJobs] = useState([]);
   const [loadingProfile, setLoadingProfile] = useState(true);
 
-  // If the user hasn't finished onboarding, kick them to the onboarding page
-  useEffect(() => {
-    if (status === 'authenticated' && session?.user?.onboardingComplete === false) {
-      router.push('/onboarding');
-    }
-  }, [status, session, router]);
+
 
   useEffect(() => {
     setStats(getTrackerStats());
@@ -36,7 +31,7 @@ export default function DashboardPage() {
       }
     }
     
-    if (status === 'authenticated' && session?.user?.onboardingComplete) {
+    if (status === 'authenticated') {
       fetchProfile();
     } else {
       setLoadingProfile(false);

@@ -39,12 +39,7 @@ export default function SearchAgentPage() {
   
   const pastelColors = ['var(--lj-card-peach)', 'var(--lj-card-mint)', 'var(--lj-card-lavender)', 'var(--lj-card-blue)', 'var(--lj-card-pink)'];
 
-  // Redirect if not onboarded
-  useEffect(() => {
-    if (status === 'authenticated' && session?.user?.onboardingComplete === false) {
-      router.push('/onboarding');
-    }
-  }, [status, session, router]);
+
 
   // Initial fetch
   useEffect(() => {
@@ -88,7 +83,7 @@ export default function SearchAgentPage() {
       }
     }
     
-    if (status === 'authenticated' && session?.user?.onboardingComplete) {
+    if (status === 'authenticated') {
       fetchProfileAndJobs();
     }
   }, [status, session]);

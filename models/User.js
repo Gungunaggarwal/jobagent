@@ -18,11 +18,11 @@ const UserSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ['candidate', 'recruiter'],
-      // Will be set during onboarding
+      default: 'candidate',
     },
     onboardingComplete: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     // Flexible profile object to store answers from the onboarding flow
     profile: {
